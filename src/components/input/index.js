@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 
-const Input = ({label, placeholder, keyboardType, isTextArea}) => {
+const Input = ({label, placeholder, keyboardType, isTextArea, ...rest}) => {
   if (isTextArea) {
     return (
       <View>
@@ -12,6 +12,7 @@ const Input = ({label, placeholder, keyboardType, isTextArea}) => {
           keyboardType={keyboardType}
           numberOfLines={5}
           style={styles.textArea}
+          {...rest}
         />
       </View>
     );
@@ -23,6 +24,7 @@ const Input = ({label, placeholder, keyboardType, isTextArea}) => {
         style={styles.input}
         placeholder={placeholder}
         keyboardType={keyboardType}
+        {...rest}
       />
     </View>
   );
