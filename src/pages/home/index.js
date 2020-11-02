@@ -14,15 +14,20 @@ import Firebase from '../../config/Firebase';
 const Home = (props) => {
   const [kontak, setKontak] = useState({});
   const [kontakKey, setKontakKey] = useState([]);
-  useEffect(() => {
+  const getData = () => {
     Firebase.database()
-      .ref('kontak')
-      .once('value', (querySnapShot) => {
+      .ref('kontak/')
+      .on('value', (querySnapShot) => {
         let data = querySnapShot.val() ? querySnapShot.val() : {};
         const kontakItem = {...data};
+        console.log('berubaaaaaah');
         setKontak(kontakItem);
         setKontakKey(Object.keys(kontakItem));
       });
+  };
+
+  useEffect(() => {
+    getData();
   }, []);
   return (
     <View style={styles.page}>
@@ -30,24 +35,24 @@ const Home = (props) => {
         <View style={styles.page}>
           {kontakKey ? (
             kontakKey.map((key) => {
-              return (
-                <List
-                  text={kontak[key].nama}
-                  nomer={kontak[key].nomer}
-                  key={key}
-                />
-              );
+              {
+                return kontak[key] ? (
+                  <List
+                    text={kontak[key].nama}
+                    nomer={kontak[key].nomer}
+                    key={key}
+                    onPress={() =>
+                      props.navigation.navigate('Detail', {id: key})
+                    }
+                  />
+                ) : (
+                  <View></View>
+                );
+              }
             })
           ) : (
             <Text>loading</Text>
           )}
-        </View>
-        <View style={styles.buttonWrapper}>
-          <TouchableOpacity
-            style={styles.btnTambah}
-            onPress={() => props.navigation.navigate('Tambah')}>
-            <FontAwesomeIcon icon={faPlus} color="#fff" size={20} />
-          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -66,6 +71,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     padding: 10,
+    paddingBottom: 50,
   },
   buttonWrapper: {
     flex: 1,
