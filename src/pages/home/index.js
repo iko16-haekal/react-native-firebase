@@ -19,10 +19,9 @@ const Home = (props) => {
       .ref('kontak/')
       .on('value', (querySnapShot) => {
         let data = querySnapShot.val() ? querySnapShot.val() : {};
-        const kontakItem = {...data};
-        console.log('berubaaaaaah');
-        setKontak(kontakItem);
-        setKontakKey(Object.keys(kontakItem));
+        const kontakData = {...data};
+        setKontak(kontakData);
+        setKontakKey(Object.keys(kontakData));
       });
   };
 
@@ -37,14 +36,19 @@ const Home = (props) => {
             kontakKey.map((key) => {
               {
                 return kontak[key] ? (
-                  <List
-                    text={kontak[key].nama}
-                    nomer={kontak[key].nomer}
-                    key={key}
-                    onPress={() =>
-                      props.navigation.navigate('Detail', {id: key})
-                    }
-                  />
+                  <View key={key}>
+                    <List
+                      text={kontak[key].nama}
+                      nomer={kontak[key].nomer}
+                      id={key}
+                      toUbah={() =>
+                        props.navigation.navigate('Ubah', {id: key})
+                      }
+                      onPress={() =>
+                        props.navigation.navigate('Detail', {id: key})
+                      }
+                    />
+                  </View>
                 ) : (
                   <View></View>
                 );
